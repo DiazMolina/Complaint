@@ -6,16 +6,17 @@ from schemas.request.user import UserRegisterIn, UserLoginIn
 router = APIRouter(tags=["Auth"])
 
 
-@router.post('/register', status_code=201)
+@router.post("/register", status_code=201)
 async def register(user_data: UserRegisterIn):
     token = await UserManager.register(user_data.dict())
-    return {'token': token}
+    return {"token": token}
 
 
-@router.post('/login', status_code=200)
+@router.post("/login", status_code=200)
 async def login(user_data: UserLoginIn):
     token = await UserManager.login(user_data.dict())
-    return {'token': token}
+    return {"token": token}
+
 
 # @router.post('/log')
 # async def log(user_data: UserLoginIn):

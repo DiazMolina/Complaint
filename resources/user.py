@@ -7,7 +7,9 @@ from managers.user import UserManager
 from models import RoleType
 from schemas.response.user import UserOut
 
-router = APIRouter(tags=["Users"], dependencies=[Depends(oauth2_scheme), Depends(is_admin)])
+router = APIRouter(
+    tags=["Users"], dependencies=[Depends(oauth2_scheme), Depends(is_admin)]
+)
 
 
 @router.get("/users", response_model=List[UserOut])

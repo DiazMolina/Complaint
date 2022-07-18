@@ -17,19 +17,25 @@ class AuthManager:
         try:
             payload = {
                 "sub": user["id"],
-                "exp": datetime.utcnow() + timedelta(minutes=129)
+                "exp": datetime.utcnow() + timedelta(minutes=129),
             }
-            return jwt.encode(payload, config('SECRET_KEY'), algorithm='HS256')
+            return jwt.encode(payload, config("SECRET_KEY"), algorithm="HS256")
         except Exception:
             raise HTTPException(status_code=500, detail="Can't generate a token.")
 
 
 class CustomBearer(HTTPBearer):
-    async def __call__(self, request: Request) -> Optional[HTTPAuthorizationCredentials]:
+    async def __call__(
+        self, request: Request
+    ) -> Optional[HTTPAuthorizationCredentials]:
         res = await super().__call__(request)
         try:
-            payload = jwt.decode(res.credentials, config('SECRET_KEY'), algorithms=['HS256'])
-            user_data = await database.fetch_one(user.select().where(user.c.id == payload['sub']))
+            payload = jwt.decode(
+                res.credentials, config("SECRET_KEY"), algorithms=["HS256"]
+            )
+            user_data = await database.fetch_one(
+                user.select().where(user.c.id == payload["sub"])
+            )
             request.state.user = user_data
             print(user_data)
             return payload
